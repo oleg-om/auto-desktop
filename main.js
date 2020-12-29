@@ -19,6 +19,8 @@ const settingsOfSiteSaved = require("./src/lists/settingsofsite.json");
 
 const isDev = !app.isPackaged;
 
+if (require("electron-squirrel-startup")) return;
+
 const socket = io("http://195.2.76.23:8090", {
   transports: ["websocket"],
   autoConnect: false,
