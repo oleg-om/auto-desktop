@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PrinterList from "../lists/printers.json";
 import settings from "../lists/settings.json";
 import places from "../lists/places.json";
@@ -42,17 +42,25 @@ export default function App() {
   const saveData = () => {
     electron.notificationApi.sendSettings(state);
   };
+  const [version, setVersion] = useState("");
+  useEffect(() => {
+    electron.api.receive("app_version", (data) => setVersion(data));
+    return () => {};
+  }, [version]);
+  electron.updateApi.new("update_available", (data) => console.log(data));
   return (
     <div className="m-3">
       {showSettings === false ? (
         <div>
           <h2 className="text-lg font-bold text-center">autodomcrm.ru</h2>
+          <p className="mb-2 text-center">Версия: {version}</p>
           <p>
             Система управления для печати заказов с сайта autodomcrm.ru. В
             настройках вы можете выбрать стандартный принтер для печати и
             указать что именно вам нужно печатать. Также присутствует настройка
             уведомлений о новых заказах.
           </p>
+
           <button
             className="my-3 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 hover:text-white rounded-lg"
             type="button"

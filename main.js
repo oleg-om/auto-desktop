@@ -11,6 +11,7 @@ const fs = require("fs");
 const fetch = require("node-fetch");
 const htmlCreator = require("html-creator");
 const io = require("socket.io-client");
+const { autoUpdater } = require("electron-updater");
 const settings = require("./src/lists/settings.json");
 const printFunc = require("./funcprint");
 const razvalPrint = require("./print/razval");
@@ -18,8 +19,6 @@ const autopartPrint = require("./print/autopart");
 const settingsOfSiteSaved = require("./src/lists/settingsofsite.json");
 
 const isDev = !app.isPackaged;
-
-if (require("electron-squirrel-startup")) return;
 
 const socket = io("http://195.2.76.23:8090", {
   transports: ["websocket"],
@@ -83,6 +82,9 @@ function createWindow() {
     ]);
     tray.setToolTip("Система управления Autodom PC");
     tray.setContextMenu(contextMenu);
+  });
+  win.once("ready-to-show", () => {
+    autoUpdater.checkForUpdatesAndNotify();
   });
 }
 
@@ -296,3 +298,18 @@ const template = [
 
 const menu = Menu.buildFromTemplate(template);
 Menu.setApplicationMenu(menu);
+
+ipcMain.on("app_version", (event) => {
+  event.sender.send("app_version", app.getVersion());
+});
+console.log(app.getVersion());
+
+autoUpdater.on("update-available", () => {
+  mainWindow.webContents.send("update_available");
+});
+autoUpdater.on("update-downloaded", () => {
+  mainWindow.webContents.send("update_downloaded");
+});
+ipcMain.on("restart_app", () => {
+  autoUpdater.quitAndInstall();
+});
