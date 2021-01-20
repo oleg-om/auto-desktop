@@ -1,10 +1,15 @@
 const path = require("path");
 
 module.exports = {
-  mode: "development",
+  mode: "production",
   entry: "./src/js/index.js",
   devtool: "inline-source-map",
   target: "electron-renderer",
+  node: {
+    global: true,
+    __dirname: true,
+    __filename: true,
+  },
   module: {
     rules: [
       {
@@ -45,6 +50,6 @@ module.exports = {
   },
   output: {
     filename: "app.js",
-    path: path.resolve(__dirname, "build", "js"),
+    path: path.resolve(__dirname, "build-client", "js"),
   },
 };

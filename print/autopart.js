@@ -1,16 +1,18 @@
+const { app } = require("electron");
 const fs = require("fs");
-const placeList = require("../src/lists/places.json");
 
-const autopartPrint = (name, settings) => {
+const autopartPrint = (name, settings, placeList) => {
   const place = placeList.find((it) => it.id === name.place);
   const preorder = `${
     name.preorder
-      ? name.preorder.map(
-          (it) =>
-            `<p>${it.autopartItem} ${
-              it.quantity ? `- ${it.quantity} шт` : ""
-            }</p>`
-        )
+      ? name.preorder
+          .map(
+            (it) =>
+              `<p>${it.autopartItem} ${
+                it.quantity ? `- ${it.quantity} шт` : ""
+              }</p>`
+          )
+          .join("")
       : null
   }`;
   const date = `${new Date(name.date)
@@ -23,24 +25,24 @@ const autopartPrint = (name, settings) => {
               .${new Date(name.date).getFullYear()}
               `;
   const currentPlace = placeList.find((it) => it.id === name.place);
-  const check = `<!DOCTYPE html><html lang="ru"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" type="text/css" href="../css/tailwind.min.css" /> <title>Печать</title><body>
+  const check = `<!DOCTYPE html><html lang="ru"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" type="text/css" href="./tailwind.min.css" /> <title>Печать</title><body>
   <div class="w-full p-5">
       <h3 class="text-center text-lg font-bold">
         Номер заказа ${name.id_autoparts}
       </h3>
       <div
-        class="flex justify-between mb-3 text-sm border-b-2 border-black pb-3"
+        class="mb-3 text-xs border-b-2 border-black pb-3"
       >
         <p>Заказ:</p>
         <div class="flex flex-col text-right">
           ${preorder}
         </div>
       </div>
-      <div class="flex justify-between text-sm">
+      <div class="flex justify-between text-xs">
         <p>Предоплата:</p>
         ${name.prepay ? `<p>${name.prepay}</p>` : `<p>Нет</p>`}
       </div>
-      <div class="flex justify-between text-sm">
+      <div class="flex justify-between text-xs">
         <p>Дата оформления заказа:</p>
 
         <p>
@@ -49,7 +51,7 @@ const autopartPrint = (name, settings) => {
       </div>
       ${
         placeList
-          ? `<div class="flex justify-between mb-3 text-sm border-b-2 border-black pb-3">
+          ? `<div class="flex justify-between mb-3 text-xs border-b-2 border-black pb-3">
             <p>Адрес:</p>
 
             <p>
@@ -60,7 +62,7 @@ const autopartPrint = (name, settings) => {
       } ${
     currentPlace.autopartsphone && placeList
       ? `
-      <div class="flex justify-between text-sm">
+      <div class="flex justify-between text-xs">
         <p>Вопросы по заказу:</p>
 
         <p class="font-bold">${currentPlace.autopartsphone}</p>
@@ -68,12 +70,12 @@ const autopartPrint = (name, settings) => {
     `
       : ""
   }
-      <div class="mt-3 mb-1 w-full text-sm">
+      <div class="mt-3 mb-1 w-full text-xs">
         <p>Если вы недовольны качеством обслуживания обратитесь:</p>
       </div>
       ${
         settings.helpphone
-          ? `<div class="flex justify-between text-sm">
+          ? `<div class="flex justify-between text-xs">
         <p>Контроль качества:</p>
 
         <p>${settings.helpphone}</p>
@@ -82,7 +84,7 @@ const autopartPrint = (name, settings) => {
       }
       <h2 class="text-center text-lg mt-2 font-bold">Спасибо за заказ!</h2>
     </div></body>`;
-  fs.writeFile("./temp/autopart.html", check, (err) => {
+  fs.writeFile(app.getPath("userData") + "/autopart.html", check, (err) => {
     if (err) {
       console.log("Error writing autopart html", err);
     } else {

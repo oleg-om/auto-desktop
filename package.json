@@ -1,8 +1,8 @@
 {
   "name": "autodom-crm",
-  "version": "1.0.0",
-  "productName": "autodom-crm",
-  "description": "Auto print and notificatioan app for autodomcrm.ru",
+  "version": "1.0.7",
+  "productName": "Autodom PC",
+  "description": "Автопечать предчеков и получение уведомлений с сайта autodomcrm.ru",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -16,15 +16,26 @@
     "type": "git",
     "url": "https://github.com/olegoriginal/AutodomPC.git"
   },
+  "build": {
+    "extends": null,
+    "extraFiles": [
+      "settings"
+    ]
+  },
   "author": "olegoriginal",
   "license": "ISC",
   "dependencies": {
+    "app-root-path": "^3.0.0",
     "electron-is-dev": "^1.2.0",
+    "electron-json-storage": "^4.3.0",
     "electron-log": "^4.3.1",
+    "electron-settings": "^4.0.2",
+    "electron-store": "^6.0.1",
     "electron-updater": "^4.3.5",
     "express": "^4.17.1",
     "html-creator": "^0.4.4",
     "node-fetch": "^2.6.1",
+    "os": "^0.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "socket.io-client": "^3.0.4"

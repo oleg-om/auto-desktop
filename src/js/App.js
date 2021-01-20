@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
-import PrinterList from "../lists/printers.json";
-import settings from "../lists/settings.json";
-import places from "../lists/places.json";
 
 export default function App() {
   const [state, setState] = useState({
-    printer: settings.printer,
-    printerbig: settings.printerbig,
-    autoprintrazval: settings.autoprintrazval,
-    autoprintrazvaltalon: settings.autoprintrazvaltalon,
-    autoprintautopart: settings.autoprintautopart,
-    autoprintshinomontazh: settings.autoprintshinomontazh,
-    shinomontazhnumber: settings.shinomontazhnumber,
-    place: settings.place,
-    notifyrazval: settings.notifyrazval,
-    notifyoil: settings.notifyoil,
-    notifyautopart: settings.notifyautopart,
+    printer: "",
+    printerbig: "",
+    autoprintrazval: "",
+    autoprintrazvaltalon: "",
+    autoprintautopart: "",
+    autoprintshinomontazh: "",
+    shinomontazhnumber: "",
+    place: "",
+    notifyrazval: "",
+    notifyoil: "",
+    notifyautopart: "",
   });
+
   const [showSettings, setShowSetting] = useState(false);
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -43,11 +41,35 @@ export default function App() {
     electron.notificationApi.sendSettings(state);
   };
   const [version, setVersion] = useState("");
+  const [update, setUpdate] = useState();
+  const [updateDownloaded, setUpdateDownloaded] = useState();
+  const [places, setPlaces] = useState([
+    { name: "Адреса не загружены", id: "" },
+  ]);
+  const [printers, setPrinters] = useState([
+    { name: "Принтеры не загружены", id: "" },
+  ]);
   useEffect(() => {
     electron.api.receive("app_version", (data) => setVersion(data));
     return () => {};
   }, [version]);
-  electron.updateApi.new("update_available", (data) => console.log(data));
+  useEffect(() => {
+    electron.api.receive("get_settings", (data) => setState(JSON.parse(data)));
+    electron.api.receive("get_places", (data) => setPlaces(JSON.parse(data)));
+    electron.api.receive("get_printers", (data) =>
+      setPrinters(JSON.parse(data))
+    );
+    return () => {};
+  }, [showSettings]);
+
+  setInterval(function () {
+    electron.updateApi.new("update_available", () => setUpdate(true));
+    electron.updateApi.taken("update_downloaded", (data) => {
+      setUpdateDownloaded(true);
+      setUpdate();
+    });
+  }, 300000);
+
   return (
     <div className="m-3">
       {showSettings === false ? (
@@ -68,6 +90,40 @@ export default function App() {
           >
             Настройки
           </button>
+          {update ? (
+            <div className="bg-gray-200 rounded-lg shadow p-3 mb-3 fixed z-100 bottom-0">
+              <p>Доступно обновление. Идет загрузка...</p>
+              <button
+                className="bg-white p-1 rounded mt-2 hover:bg-gray-100"
+                type="button"
+                onClick={() => setUpdate()}
+              >
+                Закрыть
+              </button>
+            </div>
+          ) : null}
+          {updateDownloaded ? (
+            <div className="bg-gray-200 rounded-lg shadow p-3 mb-3 fixed z-100 bottom-0">
+              <p>
+                Обновление загружено и будет установлено после перезагрузки.
+                Перезагрузить сейчас?
+              </p>
+              <button
+                className="bg-green-500 p-1 rounded mt-2 mr-2 text-white hover:bg-green-600"
+                type="button"
+                onClick={() => electron.updateApi.restart()}
+              >
+                Перезагрузить
+              </button>
+              <button
+                className="bg-white p-1 rounded mt-2 hover:bg-gray-100"
+                type="button"
+                onClick={() => setUpdate()}
+              >
+                Закрыть
+              </button>
+            </div>
+          ) : null}
         </div>
       ) : null}
       {showSettings !== false ? (
@@ -127,7 +183,7 @@ export default function App() {
                 <option value="" className="text-gray-800">
                   Выберете принтер
                 </option>
-                {PrinterList.map((it, index) => {
+                {printers.map((it, index) => {
                   return (
                     <option value={it.name} key={index}>
                       {it.name}
@@ -164,7 +220,7 @@ export default function App() {
                 <option value="" className="text-gray-800">
                   Выберете принтер
                 </option>
-                {PrinterList.map((it, index) => {
+                {printers.map((it, index) => {
                   return (
                     <option value={it.name} key={index}>
                       {it.name}
@@ -222,7 +278,7 @@ export default function App() {
                     onChange={checkboxChange}
                     type="checkbox"
                   />
-                  Автопечать предчеков на развал-схождение
+                  Автопечать предчеков на развал и масло
                 </label>
               </div>
               <div className="mb-2">
@@ -236,7 +292,7 @@ export default function App() {
                     onChange={checkboxChange}
                     type="checkbox"
                   />
-                  Автопечать талонов на развал-схождение
+                  Автопечать талонов на развал и масло
                 </label>
               </div>
               <div className="mb-2">
@@ -333,7 +389,7 @@ export default function App() {
           >
             Закрыть настройки
           </button>
-          <h1>I am App Component!!!</h1>
+          {/* <h1>I am App Component!!!</h1>
           <button
             onClick={() => {
               electron.notificationApi.sendNotification(
@@ -342,7 +398,7 @@ export default function App() {
             }}
           >
             Notify
-          </button>
+          </button> */}
         </div>
       ) : null}
     </div>

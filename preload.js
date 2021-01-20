@@ -10,6 +10,10 @@ contextBridge.exposeInMainWorld("electron", {
       console.log(message);
       ipcRenderer.send("newsettings", message);
     },
+    getSettings(message) {
+      console.log(message);
+      ipcRenderer.send("newsettings", message);
+    },
   },
   batteryApi: {},
   filesApi: {},
@@ -22,7 +26,13 @@ contextBridge.exposeInMainWorld("electron", {
       }
     },
     receive: (channel, func) => {
-      let validChannels = ["fromMain", "app_version"];
+      let validChannels = [
+        "fromMain",
+        "app_version",
+        "get_settings",
+        "get_places",
+        "get_printers",
+      ];
       if (validChannels.includes(channel)) {
         // Deliberately strip event as it includes `sender`
         ipcRenderer.send(channel);
@@ -35,19 +45,17 @@ contextBridge.exposeInMainWorld("electron", {
   },
   updateApi: {
     new: (channel, func) => {
-      ipcRenderer.on("update_available", () => {
-        ipcRenderer.removeAllListeners("update_available");
-        message.innerText = "A new update is available. Downloading now...";
-        notification.classList.remove("hidden");
+      ipcRenderer.send(channel);
+      ipcRenderer.on(channel, (event, ...args) => {
+        ipcRenderer.removeAllListeners(channel);
+        func(...args);
       });
     },
     taken: (channel, func) => {
-      ipcRenderer.on("update_downloaded", () => {
-        ipcRenderer.removeAllListeners("update_downloaded");
-        message.innerText =
-          "Update Downloaded. It will be installed on restart. Restart now?";
-        restartButton.classList.remove("hidden");
-        notification.classList.remove("hidden");
+      ipcRenderer.send(channel);
+      ipcRenderer.on(channel, (event, ...args) => {
+        ipcRenderer.removeAllListeners(channel);
+        func(...args);
       });
     },
     restart: (channel, func) => {

@@ -1,0 +1,13 @@
+{
+  "printer": "",
+  "printerbig": "",
+  "autoprintrazval": false,
+  "autoprintrazvaltalon": false,
+  "autoprintautopart": false,
+  "autoprintshinomontazh": false,
+  "shinomontazhnumber": "",
+  "place": "",
+  "notifyrazval": false,
+  "notifyoil": false,
+  "notifyautopart": false
+}
