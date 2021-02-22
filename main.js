@@ -19,6 +19,7 @@ const Store = require("electron-store");
 const printFunc = require("./funcprint");
 const razvalPrint = require("./print/razval");
 const autopartPrint = require("./print/autopart");
+const shinoPrint = require("./print/shinomontazh");
 const tailwind = require("./css/tailwind");
 
 const isDev = !app.isPackaged;
@@ -34,6 +35,7 @@ if (!store.get("settings")) {
       autoprintrazvaltalon: false,
       autoprintautopart: false,
       autoprintshinomontazh: false,
+      printshinomontazh: false,
       shinomontazhnumber: "",
       place: "",
       notifyrazval: false,
@@ -202,6 +204,13 @@ const optionssmall = {
   copies: 1,
 };
 
+const optionssmallTwo = {
+  silent: true,
+  deviceName: settings.printer,
+  margins: { marginType: "custom", top: 0, bottom: 0, left: 0, right: 0 },
+  copies: 2,
+};
+
 const optionsbig = {
   silent: true,
   deviceName: settings.printerbig,
@@ -266,6 +275,20 @@ socket.on("update autopart", function (data) {
   if (settings.place === data.place && settings.autoprintautopart === true) {
     autopartPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/autopart.html");
+  }
+});
+
+socket.on("shinoneprint", function (data) {
+  if (settings.place === data.place && settings.printshinomontazh === true) {
+    shinoPrint(data, settingsOfSiteSaved, placeList);
+    printFunc(optionssmall, "/shinomontazh.html");
+  }
+});
+
+socket.on("shintwoprint", function (data) {
+  if (settings.place === data.place && settings.printshinomontazh === true) {
+    shinoPrint(data, settingsOfSiteSaved, placeList);
+    printFunc(optionssmallTwo, "/shinomontazh.html");
   }
 });
 

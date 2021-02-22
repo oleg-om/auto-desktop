@@ -9,6 +9,7 @@ export default function App() {
     autoprintautopart: "",
     autoprintshinomontazh: "",
     shinomontazhnumber: "",
+    printshinomontazh: '',
     place: "",
     notifyrazval: "",
     notifyoil: "",
@@ -245,7 +246,7 @@ export default function App() {
               className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
               htmlFor="shinomontazhnumber"
             >
-              Сколько распечатать талонов на шиномонтаж?
+              Сколько распечатать талонов на шиномонтаж? (при активированной автопечати)
             </label>
             <div className="flex-shrink w-full inline-block relative mb-3">
               <input
@@ -258,6 +259,37 @@ export default function App() {
               />
             </div>
           </div>
+
+          <div className="w-full flex flex-row">
+            <div className="w-1/2 mb-6 md:mb-0 flex flex-col">
+              <label
+                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                htmlFor="grid-first-name"
+              >
+                Печать
+              </label>
+              <div className="mb-2">
+                <label htmlFor="printshinomontazh">
+                  <input
+                    className="mr-2"
+                    value={state.printshinomontazh}
+                    name="printshinomontazh"
+                    id="printshinomontazh"
+                    defaultChecked={state.printshinomontazh}
+                    onChange={checkboxChange}
+                    type="checkbox"
+                  />
+                  Печать талонов на шиномонтаж
+                </label>
+              </div>
+
+
+
+            </div>
+
+          </div>
+
+
 
           <div className="w-full flex flex-row">
             <div className="w-1/2 mb-6 md:mb-0 flex flex-col">

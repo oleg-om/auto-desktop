@@ -70,3 +70,5 @@ yarn-error.log
 *.yml
 
 /dist
+/img
+img
