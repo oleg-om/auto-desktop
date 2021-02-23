@@ -116,8 +116,8 @@ const shinoPrint = (name, settings, placeList) => {
       </h3>
       <div class="flex justify-between text-xs mb-1 pb-2 border-b-2 border-black">
         <p>Номер заказа:</p>
-        <p class="font-bold text-base">
-          ${name.id_shinomontazhs ? `№${name.id_shinomontazhs}` : ""}
+        <p class="text-base">
+          ${name.id_shinomontazhs ? `№ <b>${name.id_shinomontazhs}</b>` : ""}
         </p>
       </div>
       <div class="flex justify-between text-xs">
@@ -178,6 +178,22 @@ const shinoPrint = (name, settings, placeList) => {
        </p>
     </div>
     ${
+      name.discount ||
+      name.services.filter((it) => it.free === "yes").length > 0
+        ? `
+        <div class="flex justify-between w-full text-xs">
+          <p>Общая сумма:</p>
+          <p>${name.totalSumm} р.</p>
+        </div>
+      `
+        : `
+        <div class="flex justify-between w-full text-xs">
+          <p class="font-bold">Общая сумма:</p>
+          <p class="font-bold">${name.totalSumm} р.</p>
+        </div>
+      `
+    }
+    ${
       name.discount
         ? `<div class="flex justify-between w-full text-xs">
           <p class="font-bold">Скидка:</p>
@@ -211,7 +227,7 @@ const shinoPrint = (name, settings, placeList) => {
         <p class="text-left">Установленные шины:</p>
         <p class="text-right">
         ${name.tyre[0].sizeone} 
-        ${name.tyre[0].sizetwo} ${name.diametr} ${name.tyre[0].brand} ${name.tyre[0].model}
+        ${name.tyre[0].sizetwo} ${name.diametr}  ${name.tyre[0].brand} ${name.tyre[0].model}
         </p>
       </div>`
       : ""
