@@ -20,6 +20,7 @@ const printFunc = require("./funcprint");
 const razvalPrint = require("./print/razval");
 const autopartPrint = require("./print/autopart");
 const shinoPrint = require("./print/shinomontazh");
+const stoPrint = require("./print/sto");
 const tailwind = require("./css/tailwind");
 
 const isDev = !app.isPackaged;
@@ -36,7 +37,10 @@ if (!store.get("settings")) {
       autoprintautopart: false,
       autoprintshinomontazh: false,
       printshinomontazh: false,
+      autoprintsto: false,
+      printsto: false,
       shinomontazhnumber: "",
+      stonumber: "",
       place: "",
       notifyrazval: false,
       notifyoil: false,
@@ -217,17 +221,17 @@ const optionsbig = {
   margins: { marginType: "custom", top: 0, bottom: 0, left: 0, right: 0 },
   copies: 1,
 };
-console.log(settings);
+
 const settingsOfSiteSaved = store.get("settingsofsite")
   ? JSON.parse(store.get("settingsofsite"))
   : [];
 const placeList = store.get("places") ? JSON.parse(store.get("places")) : [];
 socket.on("update razval", function (data) {
-  console.log(data);
   if (
+    settings.place &&
+    settings.notifyrazval === true &&
     settings.place !== data.employeeplace &&
-    settings.place === data.place &&
-    settings.notifyrazval === true
+    settings.place === data.place
   ) {
     new Notification({
       title: "Autodom PC",
@@ -235,6 +239,7 @@ socket.on("update razval", function (data) {
     }).show();
   }
   if (
+    settings.place &&
     settings.autoprintrazval === true &&
     data.access !== "false" &&
     settings.place === data.place
@@ -246,9 +251,10 @@ socket.on("update razval", function (data) {
 
 socket.on("update oil", function (data) {
   if (
+    settings.place &&
+    settings.notifyoil === true &&
     settings.place !== data.employeeplace &&
-    settings.place === data.place &&
-    settings.notifyoil === true
+    settings.place === data.place
   ) {
     new Notification({
       title: "Autodom PC",
@@ -256,6 +262,7 @@ socket.on("update oil", function (data) {
     }).show();
   }
   if (
+    settings.place &&
     settings.autoprintrazval === true &&
     data.access !== "false" &&
     settings.place === data.place
@@ -266,29 +273,73 @@ socket.on("update oil", function (data) {
 });
 
 socket.on("update autopart", function (data) {
-  if (settings.place !== data.place && settings.notifyautopart === true) {
+  if (
+    settings.notifyautopart === true &&
+    data &&
+    settings.place &&
+    settings.place !== data.place
+  ) {
     new Notification({
       title: "Autodom PC",
       body: "Автозапчасти - новый заказ!",
     }).show();
   }
-  if (settings.place === data.place && settings.autoprintautopart === true) {
+  if (
+    settings.autoprintautopart === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
     autopartPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/autopart.html");
+    console.log(5);
   }
 });
 
 socket.on("shinoneprint", function (data) {
-  if (settings.place === data.place && settings.printshinomontazh === true) {
+  if (
+    settings.printshinomontazh === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
     shinoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/shinomontazh.html");
+    console.log(6);
   }
 });
 
 socket.on("shintwoprint", function (data) {
-  if (settings.place === data.place && settings.printshinomontazh === true) {
+  if (
+    settings.printshinomontazh === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
     shinoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/shinomontazh.html");
+    console.log(7);
+  }
+});
+
+socket.on("stooneprint", function (data) {
+  if (
+    settings.printsto === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
+    stoPrint(data, settingsOfSiteSaved, placeList);
+    printFunc(optionssmall, "/sto.html");
+    console.log(6);
+  }
+});
+
+socket.on("stotwoprint", function (data) {
+  if (
+    settings.printsto === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
+    stoPrint(data, settingsOfSiteSaved, placeList);
+    printFunc(optionssmallTwo, "/sto.html");
+    console.log(7);
   }
 });
 

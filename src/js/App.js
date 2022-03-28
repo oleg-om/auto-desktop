@@ -9,11 +9,13 @@ export default function App() {
     autoprintautopart: "",
     autoprintshinomontazh: "",
     shinomontazhnumber: "",
-    printshinomontazh: '',
+    printshinomontazh: "",
     place: "",
     notifyrazval: "",
     notifyoil: "",
     notifyautopart: "",
+    autoprintsto: "",
+    printsto: "",
   });
 
   const [showSettings, setShowSetting] = useState(false);
@@ -246,7 +248,8 @@ export default function App() {
               className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
               htmlFor="shinomontazhnumber"
             >
-              Сколько распечатать талонов на шиномонтаж? (при активированной автопечати)
+              Сколько распечатать талонов на шиномонтаж? (при активированной
+              автопечати)
             </label>
             <div className="flex-shrink w-full inline-block relative mb-3">
               <input
@@ -254,6 +257,26 @@ export default function App() {
                 value={state.shinomontazhnumber}
                 name="shinomontazhnumber"
                 id="shinomontazhnumber"
+                type="number"
+                onChange={onChange}
+              />
+            </div>
+          </div>
+
+          <div className="mb-5 w-full pr-3">
+            <label
+              className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+              htmlFor="stonumber"
+            >
+              Сколько распечатать талонов на сто? (при активированной
+              автопечати)
+            </label>
+            <div className="flex-shrink w-full inline-block relative mb-3">
+              <input
+                className="block appearance-none w-full bg-grey-lighter border border-gray-300 focus:border-gray-500 focus:outline-none py-1 px-4 pr-8 rounded"
+                value={state.stonumber}
+                name="stonumber"
+                id="stonumber"
                 type="number"
                 onChange={onChange}
               />
@@ -282,14 +305,33 @@ export default function App() {
                   Печать талонов на шиномонтаж
                 </label>
               </div>
-
-
-
             </div>
-
           </div>
 
-
+          <div className="w-full flex flex-row">
+            <div className="w-1/2 mb-6 md:mb-0 flex flex-col">
+              {/* <label
+                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                htmlFor="grid-first-name"
+              >
+                Печать
+              </label> */}
+              <div className="mb-2">
+                <label htmlFor="printshinomontazh">
+                  <input
+                    className="mr-2"
+                    value={state.printsto}
+                    name="printsto"
+                    id="printsto"
+                    defaultChecked={state.printsto}
+                    onChange={checkboxChange}
+                    type="checkbox"
+                  />
+                  Печать талонов на сто
+                </label>
+              </div>
+            </div>
+          </div>
 
           <div className="w-full flex flex-row">
             <div className="w-1/2 mb-6 md:mb-0 flex flex-col">
@@ -353,6 +395,20 @@ export default function App() {
                     type="checkbox"
                   />
                   Автопечать талонов на шиномонтаж
+                </label>
+              </div>
+              <div className="mb-2">
+                <label htmlFor="autoprintsto">
+                  <input
+                    className="mr-2"
+                    value={state.autoprintsto}
+                    defaultChecked={state.autoprintsto}
+                    name="autoprintsto"
+                    id="autoprintsto"
+                    onChange={checkboxChange}
+                    type="checkbox"
+                  />
+                  Автопечать талонов на сто
                 </label>
               </div>
             </div>
