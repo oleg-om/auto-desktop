@@ -21,7 +21,10 @@ const razvalPrint = require("./print/razval");
 const autopartPrint = require("./print/autopart");
 const shinoPrint = require("./print/shinomontazh");
 const stoPrint = require("./print/sto");
+const washPrint = require("./print/wash");
 const tailwind = require("./css/tailwind");
+const condPrint = require("./print/cond");
+const windowPrint = require("./print/window");
 
 const isDev = !app.isPackaged;
 
@@ -39,12 +42,19 @@ if (!store.get("settings")) {
       printshinomontazh: false,
       autoprintsto: false,
       printsto: false,
+      autoprintwash: false,
+      printwash: false,
       shinomontazhnumber: "",
       stonumber: "",
+      washnumber: "",
       place: "",
       notifyrazval: false,
       notifyoil: false,
       notifyautopart: false,
+      autoprintcond: false,
+      printcond: false,
+      autoprintwindow: false,
+      printwindow: false,
     }),
   });
 }
@@ -315,11 +325,11 @@ socket.on("shintwoprint", function (data) {
   ) {
     shinoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/shinomontazh.html");
-    console.log(7);
   }
 });
 
 socket.on("stooneprint", function (data) {
+ 
   if (
     settings.printsto === true &&
     settings.place &&
@@ -327,11 +337,12 @@ socket.on("stooneprint", function (data) {
   ) {
     stoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/sto.html");
-    console.log(6);
+    console.log('sto one print');
   }
 });
 
 socket.on("stotwoprint", function (data) {
+  console.log('before check stotwoprint')
   if (
     settings.printsto === true &&
     settings.place &&
@@ -339,7 +350,82 @@ socket.on("stotwoprint", function (data) {
   ) {
     stoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/sto.html");
-    console.log(7);
+    console.log('sto two print');
+  }
+});
+
+socket.on("washoneprint", function (data) {
+  if (
+    settings.printwash === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
+    washPrint(data, settingsOfSiteSaved, placeList);
+    printFunc(optionssmall, "/wash.html");
+    console.log('wash one print');
+  }
+});
+
+socket.on("washtwoprint", function (data) {
+  console.log('before check washtwoprint')
+  if (
+    settings.printwash === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
+    washPrint(data, settingsOfSiteSaved, placeList);
+    printFunc(optionssmallTwo, "/wash.html");
+    console.log('wash two print');
+  }
+});
+
+socket.on("condoneprint", function (data) {
+  if (
+    settings.printcond === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
+    condPrint(data, settingsOfSiteSaved, placeList);
+    printFunc(optionssmall, "/cond.html");
+    console.log('cond one print');
+  }
+});
+
+socket.on("condtwoprint", function (data) {
+  console.log('before check washtwoprint')
+  if (
+    settings.printcond === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
+    condPrint(data, settingsOfSiteSaved, placeList);
+    printFunc(optionssmallTwo, "/cond.html");
+    console.log('cond two print');
+  }
+});
+
+socket.on("windowoneprint", function (data) {
+  if (
+    settings.printwindow === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
+    windowPrint(data, settingsOfSiteSaved, placeList);
+    printFunc(optionssmall, "/window.html");
+    console.log('window one print');
+  }
+});
+
+socket.on("windowtwoprint", function (data) {
+  console.log('before check windowtwoprint')
+  if (
+    settings.printwindow === true &&
+    settings.place &&
+    settings.place === data.place
+  ) {
+    windowPrint(data, settingsOfSiteSaved, placeList);
+    printFunc(optionssmallTwo, "/window.html");
+    console.log('window two print');
   }
 });
 

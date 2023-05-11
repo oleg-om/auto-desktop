@@ -16,6 +16,9 @@ export default function App() {
     notifyautopart: "",
     autoprintsto: "",
     printsto: "",
+    printwash: "",
+    printcond:"",
+    printwindow:""
   });
 
   const [showSettings, setShowSetting] = useState(false);
@@ -317,7 +320,7 @@ export default function App() {
                 Печать
               </label> */}
               <div className="mb-2">
-                <label htmlFor="printshinomontazh">
+                <label htmlFor="printsto">
                   <input
                     className="mr-2"
                     value={state.printsto}
@@ -328,6 +331,82 @@ export default function App() {
                     type="checkbox"
                   />
                   Печать талонов на сто
+                </label>
+              </div>
+            </div>
+          </div>
+
+          
+          <div className="w-full flex flex-row">
+            <div className="w-1/2 mb-6 md:mb-0 flex flex-col">
+              {/* <label
+                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                htmlFor="grid-first-name"
+              >
+                Печать
+              </label> */}
+              <div className="mb-2">
+                <label htmlFor="printwash">
+                  <input
+                    className="mr-2"
+                    value={state.printwash}
+                    name="printwash"
+                    id="printwash"
+                    defaultChecked={state.printwash}
+                    onChange={checkboxChange}
+                    type="checkbox"
+                  />
+                  Печать талонов на автомойку 
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full flex flex-row">
+            <div className="w-1/2 mb-6 md:mb-0 flex flex-col">
+              {/* <label
+                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                htmlFor="grid-first-name"
+              >
+                Печать
+              </label> */}
+              <div className="mb-2">
+                <label htmlFor="printcond">
+                  <input
+                    className="mr-2"
+                    value={state.printcond}
+                    name="printcond"
+                    id="printcond"
+                    defaultChecked={state.printcond}
+                    onChange={checkboxChange}
+                    type="checkbox"
+                  />
+                  Печать талонов на замену кондиционеров 
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full flex flex-row">
+            <div className="w-1/2 mb-6 md:mb-0 flex flex-col">
+              {/* <label
+                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                htmlFor="grid-first-name"
+              >
+                Печать
+              </label> */}
+              <div className="mb-2">
+                <label htmlFor="printwindow">
+                  <input
+                    className="mr-2"
+                    value={state.printwindow}
+                    name="printwindow"
+                    id="printwindow"
+                    defaultChecked={state.printwindow}
+                    onChange={checkboxChange}
+                    type="checkbox"
+                  />
+                  Печать талонов на замену стекол 
                 </label>
               </div>
             </div>

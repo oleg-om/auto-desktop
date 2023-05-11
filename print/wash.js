@@ -1,7 +1,7 @@
 const { app } = require("electron");
 const fs = require("fs");
 
-const shinoPrint = (name, settings, placeList) => {
+const washPrint = (name, settings, placeList) => {
   const place = placeList.find((it) => it.id === name.place);
   const preorder = `${
     name.services
@@ -112,12 +112,12 @@ const shinoPrint = (name, settings, placeList) => {
           : ""
       }
       <h3 class="text-center text-lg font-bold">
-        Шиномонтаж
+    Автомойка
       </h3>
       <div class="flex justify-between text-xs mb-1 pb-2 border-b-2 border-black">
         <p>Номер заказа:</p>
         <p class="text-base">
-          ${name.id_shinomontazhs ? `№ <b>${name.id_shinomontazhs}</b>` : ""}
+          ${name.id_washs ? `№ <b>${name.id_washs}</b>` : ""}
         </p>
       </div>
       <div class="flex justify-between text-xs">
@@ -226,17 +226,6 @@ const shinoPrint = (name, settings, placeList) => {
          : ""
      }
   ${
-    name.tyre.find((it) => it?.brand)
-      ? `<div class="mt-1">
-        <p class="text-left">Установленные шины:</p>
-        <p class="text-right">
-        ${name.tyre[0].sizeone} 
-        ${name.tyre[0].sizetwo} ${name.diametr}  ${name.tyre[0].brand} ${name.tyre[0].model}
-        </p>
-      </div>`
-      : ""
-  }
-  ${
     name.comment
       ? `<div class="flex justify-between w-full text-xs">
         <p class="font-bold">Комментарий:</p>
@@ -248,13 +237,13 @@ const shinoPrint = (name, settings, placeList) => {
       <p class="text-left text-xs mt-1">Не является фискальным чеком</p>
       <h2 class="text-center text-lg mt-1 font-bold">Всегда рады вам!</h2>
     </div></body>`;
-  fs.writeFile(app.getPath("userData") + "/shinomontazh.html", check, (err) => {
+  fs.writeFile(app.getPath("userData") + "/wash.html", check, (err) => {
     if (err) {
-      console.log("Error writing shinomontazh html", err);
+      console.log("Error writing wash html", err);
     } else {
-      console.log("Successfully wrote shinomontazh html");
+      console.log("Successfully wrote wash html");
     }
   });
 };
 
-module.exports = shinoPrint;
+module.exports = washPrint;
