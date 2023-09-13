@@ -148,6 +148,16 @@ const stoPrint = (name, settings, placeList) => {
            : ""
        }
       </div>
+      <div class="flex justify-between text-xs mb-1">
+       ${
+         name?.mileage
+           ? `<p>Пробег:</p>
+        <p>
+          ${name.mileage}
+        </p>`
+           : ""
+       }
+      </div>
       <div
         class="mb-3 text-xs pb-3"
       >
