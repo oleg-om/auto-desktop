@@ -153,7 +153,7 @@ const stoPrint = (name, settings, placeList) => {
          name?.mileage
            ? `<p>Пробег:</p>
         <p>
-          ${name.mileage}
+          ${name.mileage} км
         </p>`
            : ""
        }
