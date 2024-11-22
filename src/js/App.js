@@ -18,7 +18,9 @@ export default function App() {
     printsto: "",
     printwash: "",
     printcond:"",
-    printwindow:""
+    printwindow:"",
+    printStudyTckets: false,
+    printNoneStudyTckets: true,
   });
 
   const [showSettings, setShowSetting] = useState(false);
@@ -542,6 +544,46 @@ export default function App() {
               </div>
             </div>
           </div>
+
+          <div className="w-full flex flex-row">
+            <div className="w-1/2 mb-6 md:mb-0 flex flex-col">
+              <label
+                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                htmlFor="grid-first-name"
+              >
+                Обучение здесь можно разделить печатать рабочие талоны либо талоны студентов
+              </label>
+              <div className="mb-2">
+                <label htmlFor="printNoneStudyTckets">
+                  <input
+                    className="mr-2"
+                    value={state.printNoneStudyTckets}
+                    name="printNoneStudyTckets"
+                    id="printNoneStudyTckets"
+                    defaultChecked={state.printNoneStudyTckets}
+                    onChange={checkboxChange}
+                    type="checkbox"
+                  />
+                  Печатать рабочие талоны
+                </label>
+              </div>
+              <div className="mb-2">
+                <label htmlFor="printStudyTckets">
+                  <input
+                    className="mr-2"
+                    value={state.printStudyTckets}
+                    name="printStudyTckets"
+                    id="printStudyTckets"
+                    defaultChecked={state.printStudyTckets}
+                    onChange={checkboxChange}
+                    type="checkbox"
+                  />
+                  Печатать талоны студентов
+                </label>
+              </div>
+            </div>
+          </div>
+
           <button
             className="my-3 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 hover:text-white rounded-lg"
             onClick={saveData}

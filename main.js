@@ -55,6 +55,8 @@ if (!store.get("settings")) {
       printcond: false,
       autoprintwindow: false,
       printwindow: false,
+      printStudyTckets: false,
+      printNoneStudyTckets: true,
     }),
   });
 }
@@ -301,19 +303,28 @@ socket.on("update autopart", function (data) {
   ) {
     autopartPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/autopart.html");
-    console.log(5);
   }
 });
+
+const checkIsStudy = (obj) => {
+  if (settings.printStudyTckets && obj.crmMode === 'study') {
+    return true
+  } else if (settings.printNoneStudyTckets && obj.crmMode === 'main') {
+    return true
+  } else {
+    return false
+  }
+}
 
 socket.on("shinoneprint", function (data) {
   if (
     settings.printshinomontazh === true &&
     settings.place &&
-    settings.place === data.place
+    settings.place === data.place && 
+    checkIsStudy(data)
   ) {
     shinoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/shinomontazh.html");
-    console.log(6);
   }
 });
 
@@ -321,7 +332,8 @@ socket.on("shintwoprint", function (data) {
   if (
     settings.printshinomontazh === true &&
     settings.place &&
-    settings.place === data.place
+    settings.place === data.place && 
+    checkIsStudy(data)
   ) {
     shinoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/shinomontazh.html");
@@ -333,7 +345,8 @@ socket.on("stooneprint", function (data) {
   if (
     settings.printsto === true &&
     settings.place &&
-    settings.place === data.place
+    settings.place === data.place && 
+    checkIsStudy(data)
   ) {
     stoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/sto.html");
@@ -346,7 +359,8 @@ socket.on("stotwoprint", function (data) {
   if (
     settings.printsto === true &&
     settings.place &&
-    settings.place === data.place
+    settings.place === data.place && 
+    checkIsStudy(data)
   ) {
     stoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/sto.html");
@@ -358,7 +372,8 @@ socket.on("washoneprint", function (data) {
   if (
     settings.printwash === true &&
     settings.place &&
-    settings.place === data.place
+    settings.place === data.place && 
+    checkIsStudy(data)
   ) {
     washPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/wash.html");
@@ -371,7 +386,8 @@ socket.on("washtwoprint", function (data) {
   if (
     settings.printwash === true &&
     settings.place &&
-    settings.place === data.place
+    settings.place === data.place && 
+    checkIsStudy(data)
   ) {
     washPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/wash.html");
@@ -383,7 +399,8 @@ socket.on("condoneprint", function (data) {
   if (
     settings.printcond === true &&
     settings.place &&
-    settings.place === data.place
+    settings.place === data.place && 
+    checkIsStudy(data)
   ) {
     condPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/cond.html");
@@ -396,7 +413,8 @@ socket.on("condtwoprint", function (data) {
   if (
     settings.printcond === true &&
     settings.place &&
-    settings.place === data.place
+    settings.place === data.place && 
+    checkIsStudy(data)
   ) {
     condPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/cond.html");
@@ -408,7 +426,8 @@ socket.on("windowoneprint", function (data) {
   if (
     settings.printwindow === true &&
     settings.place &&
-    settings.place === data.place
+    settings.place === data.place && 
+    checkIsStudy(data)
   ) {
     windowPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/window.html");
@@ -421,7 +440,8 @@ socket.on("windowtwoprint", function (data) {
   if (
     settings.printwindow === true &&
     settings.place &&
-    settings.place === data.place
+    settings.place === data.place && 
+    checkIsStudy(data)
   ) {
     windowPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/window.html");
