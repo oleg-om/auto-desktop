@@ -27,7 +27,6 @@ const condPrint = require("./print/cond");
 const windowPrint = require("./print/window");
 
 const isDev = !app.isPackaged;
-
 const store = new Store();
 
 if (!store.get("settings")) {
