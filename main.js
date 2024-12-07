@@ -57,6 +57,7 @@ if (!store.get("settings")) {
       printwindow: false,
       printStudyTckets: false,
       printNoneStudyTckets: true,
+      accountPostNumber: null,
     }),
   });
 }
@@ -307,12 +308,20 @@ socket.on("update autopart", function (data) {
 });
 
 const checkIsStudy = (obj) => {
-  if (settings.printStudyTckets && obj.crmMode === 'study') {
+  if (settings?.printStudyTckets && obj.crmMode === 'study') {
     return true
-  } else if (settings.printNoneStudyTckets && obj.crmMode === 'main') {
+  } else if (settings?.printNoneStudyTckets && obj.crmMode === 'main') {
     return true
   } else {
     return false
+  }
+}
+
+const checkPostNumber = (obj) => {
+  if (settings?.accountPostNumber && obj?.accountPostNumber !== settings?.accountPostNumber) {
+    return false
+  } else {
+    return true
   }
 }
 
@@ -321,7 +330,7 @@ socket.on("shinoneprint", function (data) {
     settings.printshinomontazh === true &&
     settings.place &&
     settings.place === data.place && 
-    checkIsStudy(data)
+    checkIsStudy(data) && checkPostNumber(data)
   ) {
     shinoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/shinomontazh.html");
@@ -333,7 +342,7 @@ socket.on("shintwoprint", function (data) {
     settings.printshinomontazh === true &&
     settings.place &&
     settings.place === data.place && 
-    checkIsStudy(data)
+    checkIsStudy(data) && checkPostNumber(data)
   ) {
     shinoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/shinomontazh.html");
@@ -346,7 +355,7 @@ socket.on("stooneprint", function (data) {
     settings.printsto === true &&
     settings.place &&
     settings.place === data.place && 
-    checkIsStudy(data)
+    checkIsStudy(data) && checkPostNumber(data)
   ) {
     stoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/sto.html");
@@ -360,7 +369,7 @@ socket.on("stotwoprint", function (data) {
     settings.printsto === true &&
     settings.place &&
     settings.place === data.place && 
-    checkIsStudy(data)
+    checkIsStudy(data) && checkPostNumber(data)
   ) {
     stoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/sto.html");
@@ -373,7 +382,7 @@ socket.on("washoneprint", function (data) {
     settings.printwash === true &&
     settings.place &&
     settings.place === data.place && 
-    checkIsStudy(data)
+    checkIsStudy(data) && checkPostNumber(data)
   ) {
     washPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/wash.html");
@@ -387,7 +396,7 @@ socket.on("washtwoprint", function (data) {
     settings.printwash === true &&
     settings.place &&
     settings.place === data.place && 
-    checkIsStudy(data)
+    checkIsStudy(data) && checkPostNumber(data)
   ) {
     washPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/wash.html");
@@ -400,7 +409,7 @@ socket.on("condoneprint", function (data) {
     settings.printcond === true &&
     settings.place &&
     settings.place === data.place && 
-    checkIsStudy(data)
+    checkIsStudy(data) && checkPostNumber(data)
   ) {
     condPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/cond.html");
@@ -414,7 +423,7 @@ socket.on("condtwoprint", function (data) {
     settings.printcond === true &&
     settings.place &&
     settings.place === data.place && 
-    checkIsStudy(data)
+    checkIsStudy(data) && checkPostNumber(data)
   ) {
     condPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/cond.html");
@@ -427,7 +436,7 @@ socket.on("windowoneprint", function (data) {
     settings.printwindow === true &&
     settings.place &&
     settings.place === data.place && 
-    checkIsStudy(data)
+    checkIsStudy(data) && checkPostNumber(data)
   ) {
     windowPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/window.html");
@@ -441,7 +450,7 @@ socket.on("windowtwoprint", function (data) {
     settings.printwindow === true &&
     settings.place &&
     settings.place === data.place && 
-    checkIsStudy(data)
+    checkIsStudy(data) && checkPostNumber(data)
   ) {
     windowPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/window.html");

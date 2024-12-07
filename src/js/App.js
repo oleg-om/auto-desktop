@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+const POSTS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
 export default function App() {
   const [state, setState] = useState({
     printer: "",
@@ -21,6 +23,7 @@ export default function App() {
     printwindow:"",
     printStudyTckets: false,
     printNoneStudyTckets: true,
+    accountPostNumber: null,
   });
 
   const [showSettings, setShowSetting] = useState(false);
@@ -548,21 +551,21 @@ export default function App() {
           <div className="w-full flex flex-row">
             <div className="w-1/2 mb-6 md:mb-0 flex flex-col">
               <label
-                className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
-                htmlFor="grid-first-name"
+                  className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  htmlFor="grid-first-name"
               >
                 Обучение здесь можно разделить печатать рабочие талоны либо талоны студентов
               </label>
               <div className="mb-2">
                 <label htmlFor="printNoneStudyTckets">
                   <input
-                    className="mr-2"
-                    value={state.printNoneStudyTckets}
-                    name="printNoneStudyTckets"
-                    id="printNoneStudyTckets"
-                    defaultChecked={state.printNoneStudyTckets}
-                    onChange={checkboxChange}
-                    type="checkbox"
+                      className="mr-2"
+                      value={state.printNoneStudyTckets}
+                      name="printNoneStudyTckets"
+                      id="printNoneStudyTckets"
+                      defaultChecked={state.printNoneStudyTckets}
+                      onChange={checkboxChange}
+                      type="checkbox"
                   />
                   Печатать рабочие талоны
                 </label>
@@ -570,31 +573,68 @@ export default function App() {
               <div className="mb-2">
                 <label htmlFor="printStudyTckets">
                   <input
-                    className="mr-2"
-                    value={state.printStudyTckets}
-                    name="printStudyTckets"
-                    id="printStudyTckets"
-                    defaultChecked={state.printStudyTckets}
-                    onChange={checkboxChange}
-                    type="checkbox"
+                      className="mr-2"
+                      value={state.printStudyTckets}
+                      name="printStudyTckets"
+                      id="printStudyTckets"
+                      defaultChecked={state.printStudyTckets}
+                      onChange={checkboxChange}
+                      type="checkbox"
                   />
                   Печатать талоны студентов
                 </label>
               </div>
             </div>
+            <div className="mb-5 w-1/2 pr-3">
+              <label
+                  className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+                  htmlFor="place"
+              >
+                Номер поста (Печатать пост только №)
+              </label>
+              <div className="flex-shrink w-full inline-block relative mb-3">
+                <select
+                    className="block appearance-none w-full bg-grey-lighter border border-gray-300 focus:border-gray-500 focus:outline-none py-1 px-4 pr-8 rounded"
+                    value={state.accountPostNumber}
+                    name="accountPostNumber"
+                    id="accountPostNumber"
+                    onChange={onChange}
+                >
+                  <option value="" className="text-gray-800">
+                    Печатать все талоны
+                  </option>
+                  {POSTS.map((it) => {
+                    return (
+                        <option value={it} key={`post-${it}`}>
+                          №{it}
+                        </option>
+                    );
+                  })}
+                </select>
+                <div className="pointer-events-none absolute top-0 mt-2  right-0 flex items-center px-2 text-gray-600">
+                  <svg
+                      className="fill-current h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                  >
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
 
           <button
-            className="my-3 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 hover:text-white rounded-lg"
-            onClick={saveData}
-            type="submit"
+              className="my-3 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 hover:text-white rounded-lg"
+              onClick={saveData}
+              type="submit"
           >
             Сохранить
           </button>
           <button
-            className="my-3 ml-2 px-4 py-2 bg-green-600 text-white hover:bg-green-700 hover:text-white rounded-lg"
-            onClick={() => setShowSetting(false)}
-            type="submit"
+              className="my-3 ml-2 px-4 py-2 bg-green-600 text-white hover:bg-green-700 hover:text-white rounded-lg"
+              onClick={() => setShowSetting(false)}
+              type="submit"
           >
             Закрыть настройки
           </button>
