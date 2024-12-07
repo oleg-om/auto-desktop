@@ -317,8 +317,12 @@ const checkIsStudy = (obj) => {
 }
 
 const checkPostNumber = (obj) => {
-  if (settings?.accountPostNumber && obj?.accountPostNumber !== settings?.accountPostNumber) {
-    return false
+  if (settings?.accountPostNumber) {
+    if (Number(obj.accountPostNumber) === Number(settings.accountPostNumber)) {
+      return true
+    } else {
+      return false
+    }
   } else {
     return true
   }
