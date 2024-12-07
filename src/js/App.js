@@ -554,7 +554,7 @@ export default function App() {
                   className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
                   htmlFor="grid-first-name"
               >
-                Обучение здесь можно разделить печатать рабочие талоны либо талоны студентов
+                Обучение
               </label>
               <div className="mb-2">
                 <label htmlFor="printNoneStudyTckets">

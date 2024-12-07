@@ -72,3 +72,5 @@ yarn-error.log
 /dist
 /img
 img
+build-client/js/app.js
+build-client/js/app.js.LICENSE.txt

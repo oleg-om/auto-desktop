@@ -1,6 +1,6 @@
 {
   "name": "autodom-crm",
-  "version": "1.0.43",
+  "version": "1.0.44",
   "productName": "Autodom PC",
   "description": "Автопечать предчеков и получение уведомлений с сайта autodomcrm.ru",
   "main": "main.js",
