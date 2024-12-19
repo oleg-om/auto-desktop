@@ -70,6 +70,12 @@ const socket = io("http://195.2.76.23:8090", {
 });
 socket.connect();
 
+const studySocket = io("http://89.110.97.155:8090", {
+  transports: ["websocket"],
+  autoConnect: false,
+});
+socket.connect();
+
 const html = new htmlCreator();
 storage.setDataPath(os.tmpdir());
 function createWindow() {
@@ -309,11 +315,12 @@ socket.on("update autopart", function (data) {
 const checkIsStudy = (obj) => {
   if (settings?.printStudyTckets && obj.crmMode === 'study') {
     return true
-  } else if (settings?.printNoneStudyTckets && obj.crmMode === 'main') {
-    return true
-  } else {
-    return false
   }
+  if (settings?.printNoneStudyTckets && obj.crmMode === 'main') {
+    return true
+  }
+
+  return false
 }
 
 const checkPostNumber = (obj) => {
@@ -328,110 +335,162 @@ const checkPostNumber = (obj) => {
   }
 }
 
-socket.on("shinoneprint", function (data) {
+const shinoneprint = (data) => {
   if (
-    settings.printshinomontazh === true &&
-    settings.place &&
-    settings.place === data.place && 
-    checkIsStudy(data) && checkPostNumber(data)
+      settings.printshinomontazh === true &&
+      settings.place &&
+      settings.place === data.place &&
+      checkIsStudy(data) && checkPostNumber(data)
   ) {
     shinoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/shinomontazh.html");
   }
+}
+
+socket.on("shinoneprint", function (data) {
+  shinoneprint(data);
+});
+studySocket.on("shinoneprint", function (data) {
+  shinoneprint(data);
 });
 
-socket.on("shintwoprint", function (data) {
+const shintwoprint = (data) => {
   if (
-    settings.printshinomontazh === true &&
-    settings.place &&
-    settings.place === data.place && 
-    checkIsStudy(data) && checkPostNumber(data)
+      settings.printshinomontazh === true &&
+      settings.place &&
+      settings.place === data.place &&
+      checkIsStudy(data) && checkPostNumber(data)
   ) {
     shinoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/shinomontazh.html");
   }
+}
+
+socket.on("shintwoprint", function (data) {
+  shintwoprint(data)
+});
+studySocket.on("shintwoprint", function (data) {
+  shintwoprint(data)
 });
 
-socket.on("stooneprint", function (data) {
- 
+const stooneprint = (data) => {
   if (
-    settings.printsto === true &&
-    settings.place &&
-    settings.place === data.place && 
-    checkIsStudy(data) && checkPostNumber(data)
+      settings.printsto === true &&
+      settings.place &&
+      settings.place === data.place &&
+      checkIsStudy(data) && checkPostNumber(data)
   ) {
     stoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/sto.html");
     console.log('sto one print');
   }
+}
+
+socket.on("stooneprint", function (data) {
+  stooneprint(data)
+});
+studySocket.on("stooneprint", function (data) {
+  stooneprint(data)
 });
 
-socket.on("stotwoprint", function (data) {
+const stotwoprint = (data) => {
   console.log('before check stotwoprint')
   if (
-    settings.printsto === true &&
-    settings.place &&
-    settings.place === data.place && 
-    checkIsStudy(data) && checkPostNumber(data)
+      settings.printsto === true &&
+      settings.place &&
+      settings.place === data.place &&
+      checkIsStudy(data) && checkPostNumber(data)
   ) {
     stoPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/sto.html");
     console.log('sto two print');
   }
+}
+
+socket.on("stotwoprint", function (data) {
+  stotwoprint(data)
+});
+studySocket.on("stotwoprint", function (data) {
+  stotwoprint(data)
 });
 
-socket.on("washoneprint", function (data) {
+const washoneprint = (data) => {
   if (
-    settings.printwash === true &&
-    settings.place &&
-    settings.place === data.place && 
-    checkIsStudy(data) && checkPostNumber(data)
+      settings.printwash === true &&
+      settings.place &&
+      settings.place === data.place &&
+      checkIsStudy(data) && checkPostNumber(data)
   ) {
     washPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/wash.html");
     console.log('wash one print');
   }
+}
+
+socket.on("washoneprint", function (data) {
+  washoneprint(data)
+});
+studySocket.on("washoneprint", function (data) {
+  washoneprint(data)
 });
 
-socket.on("washtwoprint", function (data) {
+const washtwoprint = (data) => {
   console.log('before check washtwoprint')
   if (
-    settings.printwash === true &&
-    settings.place &&
-    settings.place === data.place && 
-    checkIsStudy(data) && checkPostNumber(data)
+      settings.printwash === true &&
+      settings.place &&
+      settings.place === data.place &&
+      checkIsStudy(data) && checkPostNumber(data)
   ) {
     washPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/wash.html");
     console.log('wash two print');
   }
+}
+
+socket.on("washtwoprint", function (data) {
+  washtwoprint(data)
+});
+studySocket.on("washtwoprint", function (data) {
+  washtwoprint(data)
 });
 
-socket.on("condoneprint", function (data) {
+const condoneprint = (data) => {
   if (
-    settings.printcond === true &&
-    settings.place &&
-    settings.place === data.place && 
-    checkIsStudy(data) && checkPostNumber(data)
+      settings.printcond === true &&
+      settings.place &&
+      settings.place === data.place &&
+      checkIsStudy(data) && checkPostNumber(data)
   ) {
     condPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmall, "/cond.html");
     console.log('cond one print');
   }
+}
+
+socket.on("condoneprint", function (data) {
+  condoneprint(data)
+});
+studySocket.on("condoneprint", function (data) {
+  condoneprint(data)
 });
 
-socket.on("condtwoprint", function (data) {
+const condtwoprint = (data) => {
   console.log('before check washtwoprint')
   if (
-    settings.printcond === true &&
-    settings.place &&
-    settings.place === data.place && 
-    checkIsStudy(data) && checkPostNumber(data)
+      settings.printcond === true &&
+      settings.place &&
+      settings.place === data.place &&
+      checkIsStudy(data) && checkPostNumber(data)
   ) {
     condPrint(data, settingsOfSiteSaved, placeList);
     printFunc(optionssmallTwo, "/cond.html");
     console.log('cond two print');
   }
+}
+
+socket.on("condtwoprint", function (data) {
+  condtwoprint(data)
 });
 
 socket.on("windowoneprint", function (data) {
