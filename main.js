@@ -74,7 +74,7 @@ const studySocket = io("http://89.110.97.155:8090", {
   transports: ["websocket"],
   autoConnect: false,
 });
-socket.connect();
+studySocket.connect();
 
 const html = new htmlCreator();
 storage.setDataPath(os.tmpdir());
@@ -348,9 +348,11 @@ const shinoneprint = (data) => {
 }
 
 socket.on("shinoneprint", function (data) {
+  console.log("shinoneprint", data);
   shinoneprint(data);
 });
 studySocket.on("shinoneprint", function (data) {
+  console.log("study shinoneprint", data);
   shinoneprint(data);
 });
 
