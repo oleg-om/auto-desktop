@@ -2,68 +2,60 @@ const { app } = require("electron");
 const fs = require("fs");
 
 const shinoPrint = (name, settings, placeList) => {
+
+  const modifyEmployees = (emp) => {
+    if (!emp || !emp?.length) {
+      return ''
+    }
+    return (
+      `${emp
+        .map(
+          (it) =>
+            `${it.numberId
+              ? `${it.numberId}`
+              : `${it.name ? `${it.name} ${it.surname}` : ""}`
+            }`
+        )
+        .join(", ")
+      }`
+    )
+  }
+
+  const modifyServices = (ser) => {
+    if (!ser || !ser?.length) {
+      return ''
+    }
+    return (
+      `${ser
+        .map(
+          (it) =>
+            `<p>${it.name} ${it.price ? `- ${it.price} р.` : ""} ${it.quantity ? `- ${it.quantity} шт` : ""
+            }</p>`
+        )
+        .join("")
+      }`
+    )
+  }
+
   const place = placeList.find((it) => it.id === name.place);
-  const preorder = `${
-    name.services
-      ? name.services
-          .map(
-            (it) =>
-              `<p>${it.name} ${it.price ? `- ${it.price} р.` : ""} ${
-                it.quantity ? `- ${it.quantity} шт` : ""
-              }</p>`
-          )
-          .join("")
-      : ""
-  }`;
-  const employeeMain = `${
-    name.employee
-      ? name.employee
-          .filter((item) => item.role === "main")
-          .map(
-            (it) =>
-              `${
-                it.numberId
-                  ? `${it.numberId}`
-                  : `${it.name ? `${it.name} ${it.surname}` : ""}`
-              }`
-          )
-          .join(", ")
-      : ""
-  }`;
-  const employeeSecond = `${
-    name.employee
-      ? name.employee
-          .filter((item) => item.role === "second")
-          .map(
-            (it) =>
-              `${
-                it.numberId
-                  ? `${it.numberId}`
-                  : `${it.name ? `${it.name} ${it.surname}` : ""}`
-              }`
-          )
-          .join(", ")
-      : ""
-  }`;
-  const material = `${
-    name.material
-      ? name.material
-          .map(
-            (it) =>
-              `<p>${it.name} ${it.price ? `- ${it.price} р.` : ""} ${
-                it.quantity ? `- ${it.quantity} шт` : ""
-              }</p>`
-          )
-          .join("")
-      : ""
-  }`;
+  const preorder = modifyServices(name.services)
+  const preorderGroup = (group) => modifyServices(name.services?.filter((item) => item?.group === group))
+
+  const employeeMain = modifyEmployees(name.employee?.filter((item) => item.role === "main"))
+  const employeeGroup = (group) => modifyEmployees(name.employee?.filter((item) => item?.group === group))
+
+  const employeeSecond = modifyEmployees(name.employee?.filter((item) => item.role === "second"))
+
+  const material = modifyServices(name.material)
+  const materialGroup = (group) => modifyServices(name.material?.filter((item) => item?.group === group))
+
   const date = `${new Date(name.dateFinish)
     .getDate()
     .toString()
     .replace(/^(\d)$/, "0$1")}
               .${(new Date(name.dateFinish).getMonth() + 1)
-                .toString()
-                .replace(/^(\d)$/, "0$1")}
+      .toString()
+      .replace(/^(\d)$/, "0$1")}
               .${new Date(name.dateFinish).getFullYear()}
               `;
   const time = `${new Date(name.dateFinish)
@@ -71,46 +63,76 @@ const shinoPrint = (name, settings, placeList) => {
     .toString()
     .replace(/^(\d)$/, "0$1")}
                           :${new Date(name.dateFinish)
-                            .getMinutes()
-                            .toString()
-                            .replace(/^(\d)$/, "0$1")}
+      .getMinutes()
+      .toString()
+      .replace(/^(\d)$/, "0$1")}
                           `;
   const currentPlace = placeList.find((it) => it.id === name.place);
+
+  const thereAreGroups = name?.groupCount === 2
+
   const check = `<!DOCTYPE html><html lang="ru"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" type="text/css" href="./tailwind.min.css" /> <title>Печать</title><body>
   <div class="w-full px-5 pb-5">
-      ${
-        employeeMain
-          ? `<div class="flex justify-between text-xs">
-            <p>Ст. см: </p>
+      ${thereAreGroups ?
+      `<div>
+        ${
+          employeeGroup(1)
+            ? `<div class="flex justify-between text-xs">
+              <p>Исп. (группа 1): </p>
 
-            <p class="text-right">
-              ${employeeMain}
-            </p>
-          </div>`
-          : ""
-      }
-      ${
-        employeeSecond
-          ? `<div class="flex justify-between text-xs">
-            <p>Исп: </p>
+              <p class="text-right">
+                ${employeeGroup(1)}
+              </p>
+            </div>`
+            : ""
+        }
+        ${
+          employeeGroup(2)
+            ? `<div class="flex justify-between text-xs">
+              <p>Исп. (группа 2): </p>
 
-            <p class="text-right">
-              ${employeeSecond}
-            </p>
-          </div>`
-          : ""
-      }
-      ${
-        placeList
-          ? `<div class="flex justify-between mb-1 text-xs pb-1">
+              <p class="text-right">
+                ${employeeGroup(2)}
+              </p>
+            </div>`
+            : ""
+        }
+      </div>`
+      :
+      `<div>
+        ${
+          employeeMain
+            ? `<div class="flex justify-between text-xs">
+              <p>Ст. см: </p>
+
+              <p class="text-right">
+                ${employeeMain}
+              </p>
+            </div>`
+            : ""
+        }
+        ${
+          employeeSecond
+            ? `<div class="flex justify-between text-xs">
+              <p>Исп: </p>
+
+              <p class="text-right">
+                ${employeeSecond}
+              </p>
+            </div>`
+            : ""
+        }
+      </div>`}
+      ${placeList
+      ? `<div class="flex justify-between mb-1 text-xs pb-1">
             <p>Адрес:</p>
 
             <p>
               ${currentPlace.name}
             </p>
           </div>`
-          : ""
-      }
+      : ""
+    }
       <h3 class="text-center text-lg font-bold">
         Шиномонтаж
       </h3>
@@ -139,22 +161,29 @@ const shinoPrint = (name, settings, placeList) => {
         </p>
       </div>
       <div class="flex justify-between text-xs mb-1">
-       ${
-         name.mark !== "н"
-           ? `<p>Авто:</p>
+       ${name.mark !== "н"
+      ? `<p>Авто:</p>
         <p>
           ${name.mark} ${name.model !== "Прочее" ? name.model : ""}
         </p>`
-           : ""
-       }
+      : ""
+    }
       </div>
       <div
         class="mb-3 text-xs pb-3"
-      >
-        <p>Услуги:</p>
+      >${thereAreGroups ? `<p>Услуги (группа 1):</p>
+        <div class="flex flex-col text-right">
+          ${preorderGroup(1)}
+        </div>
+        <p>Услуги (группа 2):</p>
+        <div class="flex flex-col text-right">
+          ${preorderGroup(2)}
+        </div>`
+      : `<p>Услуги:</p>
         <div class="flex flex-col text-right">
           ${preorder}
-        </div>
+        </div>`
+    }
 
         <div class="flex justify-between w-full text-xs my-1">
           <p>Сумма:</p>
@@ -163,10 +192,19 @@ const shinoPrint = (name, settings, placeList) => {
           </p>
        </div>
 
-        <p>Материалы:</p>
+       ${thereAreGroups ? `<p>Материалы (группа 1):</p>
+        <div class="flex flex-col text-right">
+          ${materialGroup(1)}
+        </div>
+        <p>Материалы (группа 2):</p>
+        <div class="flex flex-col text-right">
+          ${materialGroup(2)}
+        </div>`
+      : `<p>Материалы:</p>
         <div class="flex flex-col text-right">
           ${material}
-        </div>
+        </div>`
+    }
 
         <div class="flex justify-between w-full text-xs my-1">
           <p>Сумма:</p>
@@ -181,52 +219,47 @@ const shinoPrint = (name, settings, placeList) => {
          ${name.totalSumm} р.
        </p>
     </div>
-    ${
-      name.discount ||
+    ${name.discount ||
       name.services.filter((it) => it.free === "yes").length > 0
-        ? `
+      ? `
         <div class="flex justify-between w-full text-xs">
           <p>Общая сумма:</p>
           <p>${name.totalSumm} р.</p>
         </div>
       `
-        : `
+      : `
         <div class="flex justify-between w-full text-xs">
           <p class="font-bold">Общая сумма:</p>
           <p class="font-bold">${name.totalSumm} р.</p>
         </div>
       `
     }
-    ${
-      name.discount
-        ? `<div class="flex justify-between w-full text-xs">
+    ${name.discount
+      ? `<div class="flex justify-between w-full text-xs">
           <p class="font-bold">Скидка:</p>
           <p class="font-bold">${name.discount}%</p>
         </div>`
-        : ""
+      : ""
     }
-    ${
-      !name.discount &&
+    ${!name.discount &&
       name.services.filter((it) => it.free === "yes").length > 0
-        ? `
+      ? `
         <div class="flex justify-between w-full text-xs">
           <p class="font-bold">Скидка:</p>
           <p class="font-bold">Акция</p>
         </div>
       `
-        : ""
+      : ""
     }
-     ${
-       name.discount ||
-       name.services.filter((it) => it.free === "yes").length > 0
-         ? `<div class="flex justify-between w-full text-xs">
+     ${name.discount ||
+      name.services.filter((it) => it.free === "yes").length > 0
+      ? `<div class="flex justify-between w-full text-xs">
            <p class="font-bold">Сумма со скидкой:</p>
            <p class="font-bold">${name.totalWithDiscount} р.</p>
          </div>`
-         : ""
-     }
-  ${
-    name.tyre.find((it) => it?.brand)
+      : ""
+    }
+  ${name.tyre.find((it) => it?.brand)
       ? `<div class="mt-1">
         <p class="text-left">Установленные шины:</p>
         <p class="text-right">
@@ -235,15 +268,14 @@ const shinoPrint = (name, settings, placeList) => {
         </p>
       </div>`
       : ""
-  }
-  ${
-    name.comment
+    }
+  ${name.comment
       ? `<div class="flex justify-between w-full text-xs">
         <p class="font-bold">Комментарий:</p>
         <p class="font-bold">${name.comment}</p>
       </div>`
       : ""
-  }
+    }
       </div>
       <p class="text-left text-xs mt-1">Не является фискальным чеком</p>
       <h2 class="text-center text-lg mt-1 font-bold">Всегда рады вам!</h2>
